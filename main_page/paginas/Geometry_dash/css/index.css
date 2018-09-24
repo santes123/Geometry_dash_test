@@ -1,0 +1,17 @@
+*{
+	box-sizing: border-box;
+}
+body{
+	background-color: lightblue;
+}
+canvas#canvas{
+	border:1px solid black; 
+	/*width: 1000px; */
+	height: 500px; 
+	margin-left: 12%;
+	background-color: #9da38c;
+}
+div#div_canvas{
+	padding: 15px; 
+	/*border: 1px solid black;*/
+}

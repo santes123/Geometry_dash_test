@@ -1,0 +1,2 @@
+Parte de login de la pagina,dividida en acciones cara la bbdd,controlador que intermedia entre vista y bbdd y
+la pagina principal de login

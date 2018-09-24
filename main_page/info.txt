@@ -1,0 +1,9 @@
+Raiz principal del proyecto.
+1)Conexion
+2)controlador_index
+3)carpeta css3
+4)imagenes de toda la parte principal 
+5)archivos javascript
+6)parte de logueo de la pagina
+7)parte de registro de la pagina
+8)Soap_server con diferentes servicios externos
