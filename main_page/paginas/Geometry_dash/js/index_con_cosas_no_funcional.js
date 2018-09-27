@@ -20,6 +20,7 @@ context.font = "bold 20px sans-serif";
 context.fillText("Click me!",ancho_rectangulo/2-40,alto_rectangulo/2);
 var nivel_elegido;
 var sobre_bloques = false;
+var ejecutando_salto = false;
 
 //metodo para crear obstaculos
 /*
@@ -135,22 +136,21 @@ function Cuadrado (x,y,w,h,color) {
         //this.dx = -this.dx;
         alert("colision");
         alert("GG WP");
-    }else if(this.getY()==alto_rectangulo+10 || this.getY()==alto_rectangulo){
+    }/*else if(this.getColisionMapaUsable()!= true){
+    	sobre_bloques = false;
+    	//return false;
+    }*//*else if(this.getColisionMapaUsable()!= true && this.getY() < alto_rectangulo && ejecutando_salto==false){
+    	//sobre_bloques = false;
+    	//alert("aire");
+    	//return false;
+    }*/else if(this.getY()==alto_rectangulo+10 || this.getY()==alto_rectangulo){
 
-    }else if(sobre_bloques==false && this.getY() < alto_rectangulo){
-    	//console.log(this.getColisionMapaUsable());
-    	//alert("salgo de los bloques");
-    	for (var i = 0; i < array_obstaculos.length; i++) {
-    		if(this.getColisionMapaUsable()==true && sobre_bloques==false && this.getY() < alto_rectangulo && this.getY()!= array_obstaculos[i].getY()  + array_obstaculos[i].getHeight() &&
-    			this.getX()!= array_obstaculos[i].getX() + array_obstaculos[i].getWidth()){
-    			alert("lul no hay colision con bloques");
-    		}else{
-    			//this.caida();
-    			//break;
-    		}
-    	}
-    }else{
-    	//alert("extra");
+    }else if(ejecutando_salto == true){
+
+    }/*else if(sobre_bloques==false && this.getY() < alto_rectangulo && this.getColisionMapaUsable()===undefined){
+    	alert("estoy fuerita");
+    }*/else{
+    	//con este false cae pero no funciona el salto
     	//sobre_bloques = false;
     	//return false;
     }
@@ -199,12 +199,12 @@ function Cuadrado (x,y,w,h,color) {
                this.getX() + this.getWidth() > array_obstaculos[i].getX() &&
                this.getY() < array_obstaculos[i].getY() + array_obstaculos[i].getHeight() &&
                this.getHeight() + this.getY() > array_obstaculos[i].getY() && array_obstaculos[i].getValor() == "2" /*&& sobre_bloques==false*/){
-        		alert("colision bloques azules");
+        		//alert("colision bloques azules");
         		
-        		this.y = array_obstaculos[i].getY() - array_obstaculos[i].getHeight();
+        		this.y = array_obstaculos[i].getY() - array_obstaculos[i].getHeight()+1;
         		sobre_bloques = true;
         		console.log("valor sobre_bloques al salir colisionMapa -> "+sobre_bloques);
-        		return true;
+        		//return true;
         		//break;
         		/*
    				if(cuadrado.getY() < alto_rectangulo && ){
@@ -226,7 +226,9 @@ function Cuadrado (x,y,w,h,color) {
 			    */
 
         	}else{
-            	sobre_bloques==false;
+            	//sobre_bloques = false;
+            	//alert("no hay colision con los bloques azules");
+            	//console.log("no hay colision");
             }
       }
       
@@ -364,6 +366,7 @@ function Cuadrado (x,y,w,h,color) {
     }
     */
      this.salto = function(){
+     	ejecutando_salto = true;
      	var posicionX0 = cuadrado.getX();
      	var posicionY0 = cuadrado.getY();
      	console.log("posicion x -> "+posicionX0+", posicion y -> "+posicionY0);
@@ -379,16 +382,18 @@ function Cuadrado (x,y,w,h,color) {
      				console.log("valor sobre_bloques dentro de la funcion salto -> "+sobre_bloques)
      				//if(cuadrado.getY() >= posicionY0 || cuadrado.getColisionMapaUsable()===true){
      				//console.log(resultado);
-     				//sobre_bloques== true;
+     				//sobre_bloques== false;
      				if(sobre_bloques==true){
      					alert("fin bajada1");
      					//sobre_bloques = false;
      					clearInterval(intervaloSaltoAbajo);
+     					
 
      					//sobre_bloques = false;
      				}else if( cuadrado.getY() >= alto_rectangulo+10){
      					alert("fin bajada2");
      					clearInterval(intervaloSaltoAbajo);
+     					ejecutando_salto = false;
      					//sobre_bloques = false;
      				}else{
      					alert("sigo bajando");
@@ -409,6 +414,7 @@ function Cuadrado (x,y,w,h,color) {
      		}
      	}, 1000/60);
      	//altura_actual_cuadrado = altura_actual_cuadrado - 100;
+     	ejecutando_salto = false;
     }
     this.caida = function(){
     	//alert("cuando salgo fuera de los bloques y tengo que caer");
@@ -582,12 +588,12 @@ function getEvent(event){
        		cuadrado.salto();
        	}, 1000/60);
        	*/
-       	sobre_bloques = false;
+       	//sobre_bloques = false;
        	cuadrado.salto();
        	//sobre_bloques = false;
        	//alert("sobre bloques");
        }else{
-       	sobre_bloques = false;
+       	//sobre_bloques = false;
        	cuadrado.salto();
        	//sobre_bloques = false;
         //return true;
