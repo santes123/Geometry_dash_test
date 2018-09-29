@@ -28,7 +28,8 @@
 		</div>
 		<div id="div_dialog" style="display: none;">
 			<label for="puntuacion">Puntuacion : </label><input id="puntuacion" value="0" type="text" name="puntuacion" disabled="disabled" style="width: 90px;">
-			<audio id="audio" src="files/Melano-On_Fire_[Monstercat Release].mp3">
+			<audio id="audio" src="files/geometry_dash_sounds/nivel 1.mp3">
+				<!--<audio id="audio" src="files/RISE-Worlds_2018.mp3">-->
 			  <source id="audioSource" src="files/Melano-On_Fire_[Monstercat Release].mp3" type="audio/mpeg">
 				Your browser does not support the audio element.
 			</audio>
@@ -40,5 +41,7 @@
 </body>
 <!-- archivos js necesarios-->
 <script type="text/javascript" src="js/mapas/mapa_1.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/mapas/mapa_2.js"></script>
+<script type="text/javascript" src="js/mapas/mapa_3.js"></script>
+<script id="index" type="text/javascript" src="js/index.js"></script>
 </html>
