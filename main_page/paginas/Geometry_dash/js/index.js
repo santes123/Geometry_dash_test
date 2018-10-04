@@ -3,15 +3,17 @@ var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 //variables fijas
 var FPS = 40;
-var desplazamiento_canvas = 6;
+var desplazamiento_canvas = 7;
 altura_actual_cuadrado = 500;
 ancho_actual_canvas = 10000;
 var alto_rectangulo = canvas.height;
 var ancho_rectangulo = canvas.width;
+var contador_intentos_pausa = 0;
 var div_canvas = document.getElementById("div_canvas");
 input_puntuacion = document.getElementById("puntuacion");
 var progress = document.getElementById("progress");
 var progreso_total = 10000;
+var letrero = document.getElementById("letrero_pause");
 //etiqueta audio
 var audio = document.getElementById("audio");
 var audio_fin = document.getElementById("audio_fin");
@@ -36,10 +38,7 @@ context.font = "bold 20px sans-serif";
 context.fillText("Click me!",ancho_rectangulo/2-40,alto_rectangulo/2);
 
 //metodos para play y pause del audio en 2º plano
-function playAudio(elemento) { 
-	//volumen del audio para Melano - on Fire
-	//audio.volume = 0.004;
-	//otrass
+function playAudio(elemento) {
 	elemento.volume = 0.1;
 	elemento.play(); 
 } 
@@ -79,7 +78,6 @@ function Cuadrado (x,y,w,h,color) {
 	    	sobre_bloques = false;
 	    }/*else if(this.getColision()){
 	        //alert("colision");
-	        //alert("GG WP");
 	    }*/else if(this.getY()==alto_rectangulo+10 || this.getY()==alto_rectangulo){
 
 	    }else{
@@ -237,7 +235,7 @@ function init () {
 	canvas.style.marginLeft = "1px";
 	contexto = canvas.getContext("2d");
 	var suelo = 0;
-	cuadrado = new Cuadrado(0,alto_rectangulo+10,30,30,"blue");
+	cuadrado = new Cuadrado(70,alto_rectangulo+10,30,30,"blue");
 
 	intervaloHorizontal = setInterval(function(){
 		canvas = document.getElementById("canvas");
@@ -261,8 +259,8 @@ function init () {
 				canvas.style.marginLeft = (parseInt(canvas.style.marginLeft) - desplazamiento_canvas)+"px";
 				//arreglar para que vaya acorde al movimiento y al largo del mapa aunque lo cambiemos
 				//progress.value = parseInt(progress.value) + 7;
-				progress.value = parseInt(progress.value) + 11.5;
-				//console.log("barra progreso -> "+progress.value);
+				progress.value = parseInt(progress.value) + 11;
+			//si reducimos el 1000 a 100 podemos aumentar ligeramente el rendimiento
 			},1000/FPS);
 			
 		}
@@ -278,22 +276,6 @@ function actualizar () {
 }
 //limpiar el rastro del jugador al moverse
 function limpiar (contexto,alto,ancho) {
-	var color;
-	/*
-	//al llegar a 1/3 del mapa cambia el fondo
-	if(progress.value<=progreso_total*(1/3) && progress.value<=progreso_total*(2/3)){
-		contexto.fillStyle = "#42f4aa";
-		color = "#42f4aa";
-		//al llegar a 2/3 del mapa cambia el fondo
-	}else if(progress.value>=progreso_total*(2/3) && progress.value<=progreso_total){
-		contexto.fillStyle = "#f46241";
-		color = "#f46241";
-		//sino,blanco
-	}else{
-		contexto.fillStyle = "white";
-		color = "white";
-	}
-	*/
     contexto.fillStyle = "white";
     rect(0, 0, ancho_actual_canvas, 500,"white",contexto);
     //rect(0, 0, ancho_actual_canvas, 500,color,contexto);
@@ -353,7 +335,6 @@ function startGame (nivel) {
 	canvas.onclick = "javascript:init()";
 	canvas.innerHTML = "Su navegador no soporta Canvas.";
 	div_canvas.appendChild(canvas);
-	//playAudio();
 	init();
 }
 //funcion que se ejecuta al iniciar
@@ -371,7 +352,11 @@ function selectLevel () {
 							"<button style='margin-left: 30%;' onclick='startGame(\"3\");'>Nivel 3</button>"+
 							"</dialog>";
 }
-//funcion que se ejecuta al iniciar
+//se ejecuta cuando se pausa el juego
+function gamePause (elemento) {
+	elemento.style.visibility = 'visible';
+}
+//funcion que se ejecuta al acabar
 function gameEnd () {
 	pauseAudio(audio);
     div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 250px; margin-top: 10%;'><p style='margin-left: 30%; margin-botom: 10%;'><b><u>Fin del juego!</u></b></p>"+ 
@@ -385,6 +370,7 @@ function gameEnd () {
 //capturamos el evento de las teclas y llamamos al metodo para saltar
 function getEvent(event){
     var evento = window.event;
+    //pulsando SPACE, saltamos
     if(evento.type == "keydown" && evento.keyCode == 32){
         //alert("onkeyDown barra espaciadora");
         
@@ -400,6 +386,47 @@ function getEvent(event){
        	sobre_bloques = false;
        }
       
+    }
+    //pulsando ESC, pausamos el juego
+    if(evento.type == "keydown" && evento.keyCode == 27 /*  && contador_intentos_pausa == 0*/){
+    	pauseAudio(audio);
+    	clearInterval(intervaloHorizontal);
+    	gamePause(letrero);
+    	//contador_intentos_pausa+=1;
+    }
+    //pulsando ENTER, lo volvemos a su estado anterior y play
+    if(evento.type == "keydown" && evento.keyCode == 13 /*27  && contador_intentos_pausa > 0*/){
+    	//contador_intentos_pausa = 0;
+    	letrero.style.visibility = 'hidden';
+    	playAudio(audio);
+    	intervaloHorizontal = setInterval(function(){
+		canvas = document.getElementById("canvas");
+		if(progress.value >= progreso_total){
+			clearInterval(intervaloHorizontal);
+			playAudio(audio_level_complete);
+			setTimeout(function(){ gameEnd(); }, 2000);
+			//gameEnd();
+		}else if(cuadrado.getColision()){
+			//alert("fin");
+			clearInterval(intervaloHorizontal);
+			playAudio(audio_fin);
+			//mandamos un dialog para ir a la pantalla de puntuaciones
+			gameEnd();
+		}else{
+			//hacemos el efecto subproceso para reducir el gasto de recursos
+			setTimeout(function(){
+				//le pasamos alto y ancho al metodo actualizar
+				actualizar(contexto,canvas.height,canvas.width);
+				//calculo de la movilidad del mapa para ajustarse a los intervalos.
+				canvas.style.marginLeft = (parseInt(canvas.style.marginLeft) - desplazamiento_canvas)+"px";
+				//arreglar para que vaya acorde al movimiento y al largo del mapa aunque lo cambiemos
+				//progress.value = parseInt(progress.value) + 7;
+				progress.value = parseInt(progress.value) + 11;
+			//si reducimos el 1000 a 100 podemos aumentar ligeramente el rendimiento
+			},1000/FPS);
+			
+		}
+	}, 1000/FPS);
     }
 }
 window.onload = function() { //acceso a los eventos.

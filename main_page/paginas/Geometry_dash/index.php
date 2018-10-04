@@ -35,6 +35,10 @@
 			<canvas id="canvas" width="1000" height="500" onclick="javascript:gameStart();" style="width: 1000px; height:500px;">
 				Su navegador no soporta Canvas.
 			</canvas>
+
+		</div>
+		<div>
+			<span id="letrero_pause" style="color: red; font-size: 35pt; margin-left: 38%; visibility: hidden;">GAME PAUSED</span>
 		</div>
 		<div id="div_dialog" style="display: none;">
 			<label for="puntuacion">Puntuacion : </label><input id="puntuacion" value="0" type="text" name="puntuacion" disabled="disabled" style="width: 90px;">
