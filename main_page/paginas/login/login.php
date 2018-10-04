@@ -28,7 +28,7 @@
 			<li class="li_ul"><a href="#">Opciones</a>
 				<ul id="sublista">
 					<li class="sub_li"><a href="#">Tus puntuaciones</a></li>
-					<li class="sub_li"><a href="../Geometry_dash/puntuaciones/puntuaciones.php">Mejores puntuaciones</a></li>
+					<li class="sub_li"><a href="../Geometry_dash/puntuaciones/top_10_puntuaciones/puntuaciones.php">Mejores puntuaciones</a></li>
 				</ul>
 			</li>
 		</ul>

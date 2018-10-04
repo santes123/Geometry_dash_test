@@ -2,17 +2,23 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 //variables fijas
-var FPS = 50;
-var desplazamiento_canvas = 7.5;
+var FPS = 40;
+var desplazamiento_canvas = 6;
 altura_actual_cuadrado = 500;
+ancho_actual_canvas = 10000;
 var alto_rectangulo = canvas.height;
 var ancho_rectangulo = canvas.width;
 var div_canvas = document.getElementById("div_canvas");
 input_puntuacion = document.getElementById("puntuacion");
 var progress = document.getElementById("progress");
+var progreso_total = 10000;
 //etiqueta audio
 var audio = document.getElementById("audio");
+var audio_fin = document.getElementById("audio_fin");
+var audio_level_complete = document.getElementById("audio_level_complete");
 //volumen
+audio_level_complete.volume = 0.1;
+audio_fin.volume = 0.1;
 audio.volume = 0.1;
 var nivel_elegido;
 var sobre_bloques = false;
@@ -30,20 +36,16 @@ context.font = "bold 20px sans-serif";
 context.fillText("Click me!",ancho_rectangulo/2-40,alto_rectangulo/2);
 
 //metodos para play y pause del audio en 2º plano
-function playAudio() { 
+function playAudio(elemento) { 
 	//volumen del audio para Melano - on Fire
 	//audio.volume = 0.004;
 	//otrass
-	audio.volume = 0.1;
-	audio.play(); 
+	elemento.volume = 0.1;
+	elemento.play(); 
 } 
-function pauseAudio() { 
-	audio.volume = 0.004;
-	audio.pause(); 
-}
-//funcion auxiliar para calcular aleatorios entre 2 numeros
-function numeroAleatorio(min, max) {
-  return Math.round(Math.random() * (max - min) + min);
+function pauseAudio(elemento) { 
+	elemento.volume = 0.004;
+	elemento.pause(); 
 }
 //Funcion que crea un rectangulo.
  function rect(x, y, w, h, color,context){
@@ -58,7 +60,7 @@ function Cuadrado (x,y,w,h,color) {
    this.h = h;
    this.color = color;
    //velocidad 8 m/s
-   this.speed = 8;
+   this.speed = 6;
 
     this.update = function(){
     //console.log('Nuevo registro : ');
@@ -72,22 +74,20 @@ function Cuadrado (x,y,w,h,color) {
 	    if(sobre_bloques == false && this.getColisionBloquesVerified() == false && this.getColisionGround() == false && salto_on==false){
 	    	this.caida();
 	    }
-	    
 	    if(this.getColisionMapaUsable()){
 	    	//cambiamos a false para activar la caida
 	    	sobre_bloques = false;
-	    }else if(this.getColisionMapaUsable()!=true && this.getY()< alto_rectangulo && salto_on==false){
-
-	    }else if(this.getColision()){
-	        alert("colision");
-	        alert("GG WP");
-	    }else if(this.getY()==alto_rectangulo+10 || this.getY()==alto_rectangulo){
+	    }/*else if(this.getColision()){
+	        //alert("colision");
+	        //alert("GG WP");
+	    }*/else if(this.getY()==alto_rectangulo+10 || this.getY()==alto_rectangulo){
 
 	    }else{
 	    	
 	    }
 	    //movimiento estable del jugador
     	this.x = this.x + this.speed;
+    	//console.log("jugador posicion -> "+this.x);
    	}
     this.draw = function(contexto){
     	rect(this.x, this.y, this.w, this.h, this.color,contexto);
@@ -166,16 +166,16 @@ function Cuadrado (x,y,w,h,color) {
      	}else{
      		var posicionX0 = cuadrado.getX();
 	     	var posicionY0 = cuadrado.getY();
-	     	//console.log("posicion x -> "+posicionX0+", posicion y -> "+posicionY0);
-	     	//console.log(posicionY0 - alto_rectangulo/5);
 
 	     	var intervaloSaltoArriba = setInterval(function(){
 	     		salto_on = true;
-	     		//if(cuadrado.getY() <= (alto_rectangulo - alto_rectangulo/5)){
-	     		if(cuadrado.getY() <= (posicionY0 - alto_rectangulo/5)){
+	     		//console.log(salto_on);
+	     		//alert("salto_on vale -> "+salto_on);
+	     		if(cuadrado.getY() <= (posicionY0 - 80)){
 	     			//alert("fin salto");
 	     			clearInterval(intervaloSaltoArriba);
 	     			var intervaloSaltoAbajo = setInterval(function(){
+	     				//alert("salto_on vale -> "+salto_on);
 	     				if(sobre_bloques==true){
 	     					//alert("fin bajada1");
 	     					clearInterval(intervaloSaltoAbajo);
@@ -241,24 +241,36 @@ function init () {
 
 	intervaloHorizontal = setInterval(function(){
 		canvas = document.getElementById("canvas");
-		if(cuadrado.getColision()){
+		if(progress.value >= progreso_total){
+			clearInterval(intervaloHorizontal);
+			playAudio(audio_level_complete);
+			setTimeout(function(){ gameEnd(); }, 2000);
+			//gameEnd();
+		}else if(cuadrado.getColision()){
 			//alert("fin");
 			clearInterval(intervaloHorizontal);
+			playAudio(audio_fin);
 			//mandamos un dialog para ir a la pantalla de puntuaciones
 			gameEnd();
 		}else{
-			//le pasamos alto y ancho al metodo actualizar
-			actualizar(contexto,canvas.height,canvas.width);
-			//calculo de la movilidad del mapa para ajustarse a los intervalos.
-			//canvas.style.marginLeft = (parseInt(canvas.style.marginLeft) - 7)+"px";
-			canvas.style.marginLeft = (parseInt(canvas.style.marginLeft) - desplazamiento_canvas)+"px";
-			progress.value = parseInt(progress.value) + 1;
+			//hacemos el efecto subproceso para reducir el gasto de recursos
+			setTimeout(function(){
+				//le pasamos alto y ancho al metodo actualizar
+				actualizar(contexto,canvas.height,canvas.width);
+				//calculo de la movilidad del mapa para ajustarse a los intervalos.
+				canvas.style.marginLeft = (parseInt(canvas.style.marginLeft) - desplazamiento_canvas)+"px";
+				//arreglar para que vaya acorde al movimiento y al largo del mapa aunque lo cambiemos
+				//progress.value = parseInt(progress.value) + 7;
+				progress.value = parseInt(progress.value) + 11.5;
+				//console.log("barra progreso -> "+progress.value);
+			},1000/FPS);
+			
 		}
 	}, 1000/FPS);
 }
 //Funcion que actualiza y redibujar el jugador.
 function actualizar () {
-    limpiar(contexto,);
+    limpiar(contexto);
 
     //actualizamos el cuadrado
     cuadrado.update();
@@ -266,9 +278,25 @@ function actualizar () {
 }
 //limpiar el rastro del jugador al moverse
 function limpiar (contexto,alto,ancho) {
-	
+	var color;
+	/*
+	//al llegar a 1/3 del mapa cambia el fondo
+	if(progress.value<=progreso_total*(1/3) && progress.value<=progreso_total*(2/3)){
+		contexto.fillStyle = "#42f4aa";
+		color = "#42f4aa";
+		//al llegar a 2/3 del mapa cambia el fondo
+	}else if(progress.value>=progreso_total*(2/3) && progress.value<=progreso_total){
+		contexto.fillStyle = "#f46241";
+		color = "#f46241";
+		//sino,blanco
+	}else{
+		contexto.fillStyle = "white";
+		color = "white";
+	}
+	*/
     contexto.fillStyle = "white";
-    rect(0, 0, 5000, 500,"white",contexto);
+    rect(0, 0, ancho_actual_canvas, 500,"white",contexto);
+    //rect(0, 0, ancho_actual_canvas, 500,color,contexto);
 
     sumarPuntos();
 
@@ -281,7 +309,7 @@ function limpiar (contexto,alto,ancho) {
 
     	}else{
     		audio.src = cancion1src;
-    		playAudio();
+    		playAudio(audio);
     	}
     	mundo=new Mundo("canvas",30,30); 
     }else if(nivel_elegido=="2"){
@@ -290,7 +318,7 @@ function limpiar (contexto,alto,ancho) {
 
     	}else{
     		audio.src = cancion2src;
-    		playAudio();
+    		playAudio(audio);
     	}
     	mundo=new Mundo2("canvas",30,30); 
     }else{
@@ -299,7 +327,7 @@ function limpiar (contexto,alto,ancho) {
 
     	}else{
     		audio.src = cancion3src;
-    		playAudio();
+    		playAudio(audio);
     	}
     	mundo=new Mundo3("canvas",30,30);
     }
@@ -320,7 +348,7 @@ function startGame (nivel) {
 	canvas.style.backgroundColor = "rgb(189, 196, 170)";
 
 	//cambiamos la anchura maxima para hacer un mapa
-	canvas.width = "5000";
+	canvas.width = ancho_actual_canvas;
 	canvas.height = "500";
 	canvas.onclick = "javascript:init()";
 	canvas.innerHTML = "Su navegador no soporta Canvas.";
@@ -337,7 +365,7 @@ function gameStart () {
 }
 //funcion que se ejecuta para seleccionar nivel
 function selectLevel () {
-    div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 200px; margin-top: 10%;'><p style='margin-left: 30%; margin-botom: 10%;'><b><u>Elija modo:</u></b></p>"+ 
+    div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 200px; margin-top: 10%;'><p style='margin-left: 20%; margin-botom: 10%;'><b><u>Elija un nivel:</u></b></p>"+ 
 							"<button style='margin-left: 30%;' onclick='startGame(\"1\");'>Nivel 1</button><br>"+
 							"<button style='margin-left: 30%;' onclick='startGame(\"2\");'>Nivel 2</button><br>"+
 							"<button style='margin-left: 30%;' onclick='startGame(\"3\");'>Nivel 3</button>"+
@@ -345,11 +373,12 @@ function selectLevel () {
 }
 //funcion que se ejecuta al iniciar
 function gameEnd () {
-	pauseAudio();
+	pauseAudio(audio);
     div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 250px; margin-top: 10%;'><p style='margin-left: 30%; margin-botom: 10%;'><b><u>Fin del juego!</u></b></p>"+ 
     						"<p style='margin-left: 8%; margin-botom: 10%;'>Puntuacion -> <b>"+document.getElementById("puntuacion").value+"</u></b></p>"+
-    						"<a href='acciones/enviar_puntuacion.php?puntuacion="+document.getElementById("puntuacion").value+"&nivel="+1+"'><button style='margin-left: 10%;' onclick=''>Enviar puntuacion</button></a><br>"+
+    						"<a href='acciones/enviar_puntuacion.php?puntuacion="+document.getElementById("puntuacion").value+"&nivel="+nivel_elegido+"'><button style='margin-left: 10%;' onclick=''>Enviar puntuacion</button></a><br>"+
 							"<a href='puntuaciones/puntuaciones.php'><button style='margin-left: 10%;' onclick=''>pantalla de puntuaciones</button></a><br>"+
+							"<button style='margin-left: 10%;' onclick='location.reload();'>Volver a jugar</button>"+
 							"</dialog>";
 }
 
