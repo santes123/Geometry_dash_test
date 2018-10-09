@@ -84,6 +84,26 @@
 		    echo "Error: <br>" . $this->conexion->error;
 		}
 	}
+	public function update($query){
+		// cambiar el conjunto de caracteres a utf8
+			if ($this->conexion->connect_error) {
+			    die("Connection failed: " . $this->conexion->connect_error);
+			} 
+			if (!mysqli_set_charset($this->conexion,"utf8")) {
+
+			}else{
+				echo "<br>";
+			}
+			if ($this->conexion->query($query) === TRUE) {
+			    //echo "registro actualizado!";
+			    //$resultado = "registro actualizado!";
+			    //return $resultado;
+			} else {
+			    echo "Error: <br>" . $this->conexion->error;
+			    $resultado = "Error: <br>" . $this->conexion->error;
+			    return $resultado;
+			}
+		}
 
 }
 	
