@@ -32,12 +32,13 @@
 <body>
 	<nav id="nav">
 		<ul id="nav_ul" class="nav">
-			<li class="li_ul"><a href="../../../../index.php">Index</a></li>
-			<li class="li_ul"><a href="../../../login/login.php">Geometry Dash</a></li>
-			<li class="li_ul"><a href="#">Opciones</a>
+			<li class="li_ul"><a href="../../../../index.php" style='width: 100%; margin-left:0px;'>Index</a></li>
+			<li class="li_ul"><a href="../../index.php" style='width: 100%; margin-left:0px;'>Geometry Dash</a></li>
+			<li class="li_ul"><a href="../../../Arkanoid/index.php" style='width: 100%; margin-left:0px;'>Arkanoid</a></li>
+			<li class="li_ul"><a href="#" style='width: 100%; margin-left:0px;'>Opciones</a>
 				<ul id="sublista">
-					<li class="sub_li"><a href="#">Tus puntuaciones</a></li>
-					<li class="sub_li"><a href="../top_10_puntuaciones/puntuaciones.php">Mejores puntuaciones</a></li>
+					<li class="sub_li"><a href="tus_puntuaciones.php" style='width: 100%; margin-left:0px;'>Tus puntuaciones</a></li>
+					<li class="sub_li"><a href="../top_10_puntuaciones/puntuaciones.php" style='width: 100%; margin-left:0px;'>Mejores puntuaciones</a></li>
 				</ul>
 			</li>
 		</ul>

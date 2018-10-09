@@ -61,7 +61,7 @@
 			<div>
 				<label>Contraseña : </label><input type="password" name="contrasenha" maxlength="50" style="width: 200px;"><br><br>
 			</div>
-			Has olvidado tu contraseña? <a href="#">Recuperar contraseña</a><br>
+			<br>
 			<input type="checkbox" name="checkbox" value="checkbox_condiciones" required> He leido y acepto las Policitas de privacidad<br></br>
 			<input type="submit" name="enviar" value="Registrar" style="width: 120px; height: 30px; font-size: 14pt;" />
 			</fieldset>

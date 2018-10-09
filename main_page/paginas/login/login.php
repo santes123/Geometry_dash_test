@@ -23,14 +23,56 @@
 	</header>
 	<nav id="nav">
 		<ul id="nav_ul" class="nav">
-			<li class="li_ul"><a href="../../index.php">Index</a></li>
-			<li class="li_ul"><a href="login.php">Geometry Dash</a></li>
-			<li class="li_ul"><a href="#">Opciones</a>
+			<li class="li_ul"><a href="../../index.php" style='width: 100%; margin-left:0px;'>Index</a></li>
+			<!-- Mandamos primero al login si no estas logueado-->
+			<?php
+				session_start();
+				if($_SESSION){
+					echo "<li class=\"li_ul\"><a href=\"../Geometry_dash/index.php\" style='width: 100%; margin-left:0px;'>Geometry Dash</a></li>";
+				}else{
+					echo "<li class=\"li_ul\"><a href=\"../login/login.php\" style='width: 100%; margin-left:0px;'>Geometry Dash</a></li>";
+				}
+			?>
+			<?php
+				
+				if($_SESSION){
+					echo "<li class=\"li_ul\"><a href=\"../Arkanoid/index.php\" style='width: 100%; margin-left:0px;'>Arkanoid</a></li>";
+				}else{
+					echo "<li class=\"li_ul\"><a href=\"../login/login.php\" style='width: 100%; margin-left:0px;'>Arkanoid</a></li>";
+				}
+			?>
+			<li class="li_ul"><a href="#" style='width: 100%; margin-left:0px;'>Opciones</a>
 				<ul id="sublista">
-					<li class="sub_li"><a href="#">Tus puntuaciones</a></li>
-					<li class="sub_li"><a href="../Geometry_dash/puntuaciones/top_10_puntuaciones/puntuaciones.php">Mejores puntuaciones</a></li>
+					<?php
+						if($_SESSION){
+							echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;'></a></li>";
+							echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;'></a></li>";
+						}else{
+							echo "<li class=\"sub_li\"><a href=\"login.php\" style='width: 100%; margin-left:0px;'>Logueate</a></li>";
+							echo "<li class=\"sub_li\"><a href=\"../sign_up/sign_up.php\" style='width: 100%; margin-left:0px;'>Registrate</a></li>";
+						}
+					?>
+					<!--
+					<li class="sub_li"><a href="paginas/login/login.php" style='width: 100%; margin-left:0px;'>Logueate</a></li>
+					<li class="sub_li"><a href="paginas/sign_up/sign_up.php" style='width: 100%; margin-left:0px;'>Registrate</a></li>
+					-->
+					<li class="sub_li"><a href="../contacto/contacto.php" style='width: 100%; margin-left:0px;'>Contáctanos</a></li>
 				</ul>
 			</li>
+			<!-- un hueco reservado para cuando te logueas -->
+			<?php
+				
+				if($_SESSION){
+					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."</a>";
+					echo "<ul id=\"sublista2\">";
+					echo "<li class=\"sub_li\"><a href=\"paginas/Perfil/editar_perfil/editar_perfil.php\" style='width: 100%; margin-left:0px;'>Editar Perfil</a></li>";
+					echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;' onclick=\"".session_destroy()."location.reload()\">Logout</li>";
+					echo "</ul>";
+					echo "</li>";
+				}else{
+					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>No logueado</a></li>";
+				}
+			?>
 		</ul>
 	</nav>
 	<section>
@@ -44,8 +86,9 @@
 			<div>
 				<label>Contraseña : </label> <input type="password" name="contrasenha" size="50" style="width: 200px;" maxlength="255">
 			</div>
-			<br><br>
-			No tienes cuenta? <a href="../sign_up/sign_up.php">Registrate!</a><br><br>
+			<br>
+			No tienes cuenta? <a href="../sign_up/sign_up.php">Registrate!</a><br>
+			Has olvidado tu contraseña? <a href="paginas/recuperar_contrasenha/recuperar_contrasenha.php">Recuperar contraseña</a><br><br>
 			<input type="submit" name="enviar" value="loguear" style="width: 120px; height: 30px; font-size: 14pt;" />
 			</fieldset>
 		</form>

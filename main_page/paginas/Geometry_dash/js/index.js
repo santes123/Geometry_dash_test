@@ -12,6 +12,7 @@ var contador_intentos_pausa = 0;
 var div_canvas = document.getElementById("div_canvas");
 input_puntuacion = document.getElementById("puntuacion");
 var progress = document.getElementById("progress");
+var divPuntuacion = document.getElementById("div_dialog");
 var progreso_total = 10000;
 var letrero = document.getElementById("letrero_pause");
 //etiqueta audio
@@ -242,14 +243,26 @@ function init () {
 		if(progress.value >= progreso_total){
 			clearInterval(intervaloHorizontal);
 			playAudio(audio_level_complete);
-			setTimeout(function(){ gameEnd(); }, 2000);
+			setTimeout(function(){ 
+				//quitamos el div de puntuacion y progress bar
+				divPuntuacion.style.display = 'none';
+				progress.style.display = 'none';
+				//llamamos al metodo gameEnd() que muestra el dialogo de puntuacion
+				gameEnd(); 
+			}, 2000);
 			//gameEnd();
 		}else if(cuadrado.getColision()){
 			//alert("fin");
 			clearInterval(intervaloHorizontal);
 			playAudio(audio_fin);
 			//mandamos un dialog para ir a la pantalla de puntuaciones
-			gameEnd();
+			setTimeout(function(){ 
+				//quitamos el div de puntuacion y progress bar
+				divPuntuacion.style.display = 'none';
+				progress.style.display = 'none';
+				//llamamos al metodo gameEnd() que muestra el dialogo de puntuacion
+				gameEnd(); 
+			}, 250);
 		}else{
 			//hacemos el efecto subproceso para reducir el gasto de recursos
 			setTimeout(function(){
@@ -283,45 +296,51 @@ function limpiar (contexto,alto,ancho) {
     sumarPuntos();
 
     //creamos el mapa con el objeto de la clase mapa_1.js
-    array_obstaculos = [];
+    /*
+    if(getColision() == true){
 
-    if(nivel_elegido=="1"){
-    	//alert("nivel 1");
-    	if(contador_pasadas_limpiar > 0){
-
-    	}else{
-    		audio.src = cancion1src;
-    		playAudio(audio);
-    	}
-    	mundo=new Mundo("canvas",30,30); 
-    }else if(nivel_elegido=="2"){
-    	//alert("nivel 2");
-    	if(contador_pasadas_limpiar > 0){
-
-    	}else{
-    		audio.src = cancion2src;
-    		playAudio(audio);
-    	}
-    	mundo=new Mundo2("canvas",30,30); 
     }else{
-    	//alert("nivel 3");
-    	if(contador_pasadas_limpiar > 0){
+	*/
+	   	array_obstaculos = [];
 
-    	}else{
-    		audio.src = cancion3src;
-    		playAudio(audio);
-    	}
-    	mundo=new Mundo3("canvas",30,30);
-    }
-    //mundo=new Mundo("canvas",30,30); 
-    contador_pasadas_limpiar++;
+	    if(nivel_elegido=="1"){
+	    	//alert("nivel 1");
+	    	if(contador_pasadas_limpiar > 0){
+
+	    	}else{
+	    		audio.src = cancion1src;
+	    		playAudio(audio);
+	    	}
+	    	mundo=new Mundo("canvas",30,30); 
+	    }else if(nivel_elegido=="2"){
+	    	//alert("nivel 2");
+	    	if(contador_pasadas_limpiar > 0){
+
+	    	}else{
+	    		audio.src = cancion2src;
+	    		playAudio(audio);
+	    	}
+	    	mundo=new Mundo2("canvas",30,30); 
+	    }else{
+	    	//alert("nivel 3");
+	    	if(contador_pasadas_limpiar > 0){
+
+	    	}else{
+	    		audio.src = cancion3src;
+	    		playAudio(audio);
+	    	}
+	    	mundo=new Mundo3("canvas",30,30);
+	    }
+	    //mundo=new Mundo("canvas",30,30); 
+	    contador_pasadas_limpiar++;
+    //}
+ 
 }
 function startGame (nivel) { 
 
 	nivel_elegido = nivel;
 
 	progress.style.display = 'block';
-	var divPuntuacion = document.getElementById("div_dialog");
 	divPuntuacion.style.display = 'block';
 	var dialog = document.getElementById("dialog");
 	dialog.remove();
@@ -339,17 +358,19 @@ function startGame (nivel) {
 }
 //funcion que se ejecuta al iniciar
 function gameStart () {
-    div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 200px; margin-top: 10%;'><p style='margin-left: 30%; margin-botom: 10%;'><b><u>Elija modo:</u></b></p>"+ 
-							"<button style='margin-left: 30%;' onclick='selectLevel();'>Solo</button><br>"+
-							"<button style='margin-left: 30%;' onclick='selectLevel();'>duo</button>"+
+    div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 250px; margin-top: 10%; border: 1px solid black; border-radius: 5px;'>"+
+    						"<p style='margin-left: 25%; margin-botom: 10%; font-family: \"Arial Black\";'><b><u>Elija modo:</u></b></p>"+ 
+							"<button class='botonesCanvas' style='margin-left: 15%; width: 150px; text-align: center; margin-top: 5px; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";' onclick='selectLevel();'>Solo</button><br>"+
+							"<button class='botonesCanvas' style='margin-left: 15%; width: 150px; text-align: center; margin-top: 5px; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";' onclick='selectLevel();'>duo</button>"+
 							"</dialog>";
 }
 //funcion que se ejecuta para seleccionar nivel
 function selectLevel () {
-    div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 200px; margin-top: 10%;'><p style='margin-left: 20%; margin-botom: 10%;'><b><u>Elija un nivel:</u></b></p>"+ 
-							"<button style='margin-left: 30%;' onclick='startGame(\"1\");'>Nivel 1</button><br>"+
-							"<button style='margin-left: 30%;' onclick='startGame(\"2\");'>Nivel 2</button><br>"+
-							"<button style='margin-left: 30%;' onclick='startGame(\"3\");'>Nivel 3</button>"+
+    div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 250px; margin-top: 10%; border: 1px solid black; border-radius: 5px;'>"+
+    						"<p style='margin-left: 25%; margin-botom: 10%; font-family: \"Arial Black\";'><b><u>Elija nivel:</u></b></p>"+ 
+							"<button class='botonesCanvas' style='margin-left: 15%; width: 150px; text-align: center; margin-top: 5px; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";' onclick='startGame(\"1\");'>Nivel 1</button><br>"+
+							"<button class='botonesCanvas' style='margin-left: 15%; width: 150px; text-align: center; margin-top: 5px; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";' onclick='startGame(\"2\");'>Nivel 2</button><br>"+
+							"<button class='botonesCanvas' style='margin-left: 15%; width: 150px; text-align: center; margin-top: 5px; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";' onclick='startGame(\"3\");'>Nivel 3</button>"+
 							"</dialog>";
 }
 //se ejecuta cuando se pausa el juego
@@ -358,12 +379,25 @@ function gamePause (elemento) {
 }
 //funcion que se ejecuta al acabar
 function gameEnd () {
+	/*
+	window.document.body.innerHTML = "<style type=\"text/css\">"+
+										".botonesCanvas:hover {"+
+								    		"background-color: #ff3838;"+
+										"}"+
+									"</style>";
+	var style = document.createElement("style");
+	style.type = "text/css";
+	style.innerHTML = ".botonesCanvas:hover { background-color: #ff3838; }";
+	window.document.body.appendChild(style);
+	*/
 	pauseAudio(audio);
-    div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 250px; margin-top: 10%;'><p style='margin-left: 30%; margin-botom: 10%;'><b><u>Fin del juego!</u></b></p>"+ 
-    						"<p style='margin-left: 8%; margin-botom: 10%;'>Puntuacion -> <b>"+document.getElementById("puntuacion").value+"</u></b></p>"+
-    						"<a href='acciones/enviar_puntuacion.php?puntuacion="+document.getElementById("puntuacion").value+"&nivel="+nivel_elegido+"'><button style='margin-left: 10%;' onclick=''>Enviar puntuacion</button></a><br>"+
-							"<a href='puntuaciones/puntuaciones.php'><button style='margin-left: 10%;' onclick=''>pantalla de puntuaciones</button></a><br>"+
-							"<button style='margin-left: 10%;' onclick='location.reload();'>Volver a jugar</button>"+
+    div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 250px; margin-top: 10%; border: 1px solid black; border-radius: 5px;'>"+
+    						"<p style='margin-left: 20%; margin-botom: 10%; font-family: \"Arial Black\";'><b><u>Fin del juego!</u></b></p>"+ 
+    						"<p style='margin-left: 15%; margin-botom: 10%; font-family: \"Arial Black\";'><span style='color:red;'>Puntuacion -> </span><b><u>"+document.getElementById("puntuacion").value+"</u></b></p>"+
+    						"<a href='acciones/enviar_puntuacion.php?puntuacion="+document.getElementById("puntuacion").value+"&nivel="+nivel_elegido+"'><button class='botonesCanvas' style='margin-left: 15%; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";'>Enviar puntuacion</button></a><br>"+
+							"<a href='puntuaciones/top_10_puntuaciones/puntuaciones.php'><button class='botonesCanvas' style='margin-left: 15%; margin-top: 5px; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";'>Top 10 puntuaciones</button></a><br>"+
+							"<a href='puntuaciones/tus_puntuaciones/tus_puntuaciones.php'><button class='botonesCanvas' style='margin-left: 15%; margin-top: 5px; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";'>Tus puntuaciones</button></a><br>"+
+							"<button class='botonesCanvas' style='margin-left: 15%; margin-top: 5px; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";' onclick='location.reload();'>Volver a jugar</button>"+
 							"</dialog>";
 }
 
