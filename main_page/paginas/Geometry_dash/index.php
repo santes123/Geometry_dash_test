@@ -30,12 +30,14 @@
 			<!-- un hueco reservado para cuando te logueas -->
 			<?php
 				//CONFIGURAR PARA ENVIAR PUNTUACIONES SIN ESTAR LOGUEADO(PREGUNTAR UN "NICK" AL INICIAR,O AL DESLOGUEARTE MANDAR AL USUARIO A LA PAGINA DE INICIO)
-				session_start();
-				if($_SESSION){
-					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."</a>";
+				//session_start();
+				//if($_SESSION){
+				if(isset($_COOKIE["user_session"])){
+					//echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."</a>";
+					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_COOKIE["user_session"]."</b></u>!"."</a>";
 					echo "<ul id=\"sublista2\">";
 					echo "<li class=\"sub_li\"><a href=\"../Perfil/editar_perfil/editar_perfil.php\" style='width: 100%; margin-left:0px;'>Editar Perfil</a></li>";
-					echo "<li class=\"sub_li\"><a href=\"../../index.php?deslogueado=true\" style='width: 100%; margin-left:0px;'>Logout</a></li>";
+					echo "<li class=\"sub_li\"><a href=\"../../acciones/Logout.php\" style='width: 100%; margin-left:0px;'>Logout</a></li>";
 					echo "</ul>";
 					echo "</li>";
 				}else{

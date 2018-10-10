@@ -1,12 +1,28 @@
 <?php
-	//if($_GET['deslogueado']){
+	/*
 	if(isset($_GET['deslogueado'])){
 		session_start();
 		session_destroy();
 		header("location: index.php");
-	}else{
-
 	}
+	*/
+	//mandamos una peticion GET al validar usuario, y si llega el valor,creamos la cookie de usuario para 1 hora
+	session_start();
+	if(isset($_SESSION['usuario'])){
+		/*
+		echo "<script type=\"text/javascript\">";
+		echo "alert('COOKIE CREADA!');";
+		echo "</script>";
+		*/
+		setcookie("user_session", $_SESSION['usuario'], time() + 3600);
+	}else{
+		unset($_COOKIE['user_session']);
+	}
+	/*
+	var_dump($_SESSION);
+	echo "<br>";
+	var_dump($_COOKIE);
+	*/
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,8 +47,9 @@
 			<li class="li_ul"><a href="index.php" style='width: 100%; margin-left:0px;'>Index</a></li>
 			<!-- Mandamos primero al login si no estas logueado-->
 			<?php
-				session_start();
-				if($_SESSION){
+				//session_start();
+				//if($_SESSION){
+				if(isset($_COOKIE["user_session"])){
 					echo "<li class=\"li_ul\"><a href=\"paginas/Geometry_dash/index.php\" style='width: 100%; margin-left:0px;'>Geometry Dash</a></li>";
 				}else{
 					echo "<li class=\"li_ul\"><a href=\"paginas/login/login.php\" style='width: 100%; margin-left:0px;'>Geometry Dash</a></li>";
@@ -40,7 +57,8 @@
 			?>
 			<?php
 				
-				if($_SESSION){
+				//if($_SESSION){
+				if(isset($_COOKIE["user_session"])){
 					echo "<li class=\"li_ul\"><a href=\"paginas/Arkanoid/index.php\" style='width: 100%; margin-left:0px;'>Arkanoid</a></li>";
 				}else{
 					echo "<li class=\"li_ul\"><a href=\"paginas/login/login.php\" style='width: 100%; margin-left:0px;'>Arkanoid</a></li>";
@@ -49,7 +67,8 @@
 			<li class="li_ul"><a href="#" style='width: 100%; margin-left:0px;'>Opciones</a>
 				<ul id="sublista">
 					<?php
-						if($_SESSION){
+						//if($_SESSION){
+						if(isset($_COOKIE["user_session"])){
 							echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;'></a></li>";
 							echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;'></a></li>";
 						}else{
@@ -67,11 +86,14 @@
 			<!-- un hueco reservado para cuando te logueas -->
 			<?php
 				
-				if($_SESSION){
-					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."</a>";
+				//if($_SESSION){
+				if(isset($_COOKIE["user_session"])){
+					//echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."</a>";
+					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_COOKIE['user_session']."</b></u>!"."</a>";
 					echo "<ul id=\"sublista2\">";
 					echo "<li class=\"sub_li\"><a href=\"paginas/Perfil/editar_perfil/editar_perfil.php\" style='width: 100%; margin-left:0px;'>Editar Perfil</a></li>";
-					echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;' onclick=\"".session_destroy()."location.reload()\">Logout</li>";
+					//echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;' onclick=\"".session_destroy()."location.reload()\">Logout</li>";
+					echo "<li class=\"sub_li\"><a href=\"acciones/Logout.php\" style='width: 100%; margin-left:0px;' onclick=\"\">Logout</li>";
 					echo "</ul>";
 					echo "</li>";
 				}else{
@@ -82,7 +104,6 @@
 	</nav>
 	<div id="slider">
 		<ul>
-			<!-- SUBSTITUIR CON LAS 3 QUE TENGO EN EL CORREO: GEOMETRY DASH,ARKANOID, Y MUCHO MAS-->
 			<li><img src="img/geometry_dash.jpg"></li>
 			<li><img src="img/arcanoid.png"></li>
 			<li><img src="img/mucho_mas.png"></li>
@@ -115,7 +136,7 @@
 	<footer>
 		<div>
 			<a href="#">
-			<marquee direction="down" width="400" height="200" behavior="alternate" style="border:solid">
+			<marquee direction="down" width="400" height="200" behavior="alternate" style="border:solid; float: left; margin-right: 100px;">
 				<marquee behavior="alternate">
 					<h3>Contactanos en twitter</h3>
 				</marquee>
@@ -125,9 +146,9 @@
 		<div>
 			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d574867.142075881!2d37.072083953754856!3d55.748516969346056!2m3!1f0!2f0!3f0!3m2
 			!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54afc73d4b0c9%3A0x3d44d6cc5757cf4c!2zTW9zY8O6LCBSdXNpYQ!5e0!3m2!1ses!2ses!4v1527689790695" width="400" 
-			height="100%" frameborder="" style="border:1x solid black;" allowfullscreen>
+			height="100%" frameborder="" style="border:1x solid black; float: left;" allowfullscreen>
 			</iframe>
 		</div>
-	</footer>
+</footer>
 </body>
 </html>

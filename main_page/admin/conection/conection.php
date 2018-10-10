@@ -27,9 +27,13 @@
 			 if($result->num_rows > 0){
 			 	while ($row = $result->fetch_object()){
 					if($row->pass == $parametro1){
+						//session_start();
+						//$_SESSION['usuario'] = $row->usuario;
+						//una cookie por 1 hora al llegar a index con el valor de la peticion GET
 						session_start();
 						$_SESSION['usuario'] = $row->usuario;
-						header("Location: ../../Geometry_dash/index.php");
+						//header("Location: ../../Geometry_dash/index.php");
+						header("Location: ../../../index.php");
 					}else{
 						echo "el usuario o la contraseña no coinciden. <br>";
 						echo "<input type='button' value='volver' onclick='javascript:history.back();'> ";

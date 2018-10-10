@@ -29,6 +29,11 @@ nivel enum('1','2','3','4'),
 user_id int not null,
 CONSTRAINT PK_Puntuaciones primary key(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+#tabla de ruta imagenes- perfil usuarios
+
+#tabla datos_extra de los usuarios
+
+
 #añadimos una foreign key a kla tabla usuario para que tenga que coincidir con la tabla datos_usuario
 ALTER TABLE usuario ADD CONSTRAINT usuario_datosUsuario_FK FOREIGN KEY (idUsuario)
 REFERENCES datos_usuario (id) ON DELETE CASCADE ON UPDATE CASCADE;

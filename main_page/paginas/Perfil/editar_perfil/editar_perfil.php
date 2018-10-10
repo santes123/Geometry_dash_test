@@ -1,0 +1,4 @@
+<?php
+//hacer una pagina que te ponga tus datos y los puedas editar/hacer update
+//incluiremos todos los datos de la tabla datos_usuario y crearemos otras 2 tablas,una para datos extra como direccion y demas y otra para guardar la ruta de la imagen de perfil de cada usuario(campos idUsuario y src). Con las imagenes de perfil primero, le pondremos al usuario un campo para subir su archivo de imagen al servidor y a su vez poner esa imagen de foto de perfil,y en el formulario mandaremos el src de la imagen en nuestro servidor despues de subirla. Luego la foto aparecera(cargando la src desde la base de datos) en el navegador al lado del nombre y al cargar editar perfil la proxima vez.(hay k poner una imagen por defecto a todos, que sera una silueta subida en el servidor)
+?>
