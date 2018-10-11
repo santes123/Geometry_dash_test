@@ -43,9 +43,7 @@
 			 	echo "el usuario o la contraseña no existe.<br>";
 			 	echo "<input type='button' value='volver' onclick='javascript:history.back();'> ";
 			 }
-			
 	}
-
 	public function consulta($query){
 		$result = $this->conexion->query($query);
 		if($this->conexion->errno){
@@ -54,7 +52,7 @@
 			return $result;
 		}
 	}
-	public function insert_usuario($query,$query2){
+	public function insert_usuario($query,$query2,$query3){
 		// cambiar el conjunto de caracteres a utf8
 		if ($this->conexion->connect_error) {
 		    die("Connection failed: " . $this->conexion->connect_error);
@@ -65,7 +63,9 @@
 		}
 		$result1 = $this->conexion->query($query);
 		$result2 = $this->conexion->query($query2);
-		if ($result1 === TRUE && $result2 === TRUE) {
+		//extra para añadir silueta
+		$result3 = $this->conexion->query($query3);
+		if ($result1 === TRUE && $result2 === TRUE && $result3 === TRUE) {
 		    header("Location: ../../login/login.php");
 		} else {
 		    echo "Error: <br>" . $this->conexion->error;
@@ -99,7 +99,7 @@
 				echo "<br>";
 			}
 			if ($this->conexion->query($query) === TRUE) {
-			    //echo "registro actualizado!";
+			    echo "registro actualizado!";
 			    //$resultado = "registro actualizado!";
 			    //return $resultado;
 			} else {
@@ -108,8 +108,30 @@
 			    return $resultado;
 			}
 		}
+		public function update_usuario($query,$query2){
+		// cambiar el conjunto de caracteres a utf8
+			if ($this->conexion->connect_error) {
+			    die("Connection failed: " . $this->conexion->connect_error);
+			} 
+			if (!mysqli_set_charset($this->conexion,"utf8")) {
+
+			}else{
+				echo "<br>";
+			}
+			$result1 = $this->conexion->query($query);
+			$result2 = $this->conexion->query($query2);
+			if ($result1 === TRUE && $result2 === TRUE) {
+			    echo "registro actualizado!";
+			    //$resultado = "registro actualizado!";
+			    //return $resultado;
+			    return true;
+			} else {
+			    echo "Error: <br>" . $this->conexion->error;
+			    //$resultado = "Error: <br>" . $this->conexion->error;
+			    //return $resultado;
+			    return false;
+			}
+		}
 
 }
-	
-
 ?>

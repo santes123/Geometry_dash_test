@@ -1,8 +1,8 @@
 *{
 	box-sizing: border-box;
 }
-body{
-    background-color: lightblue;
+section{
+    margin-top: 25px;
 }
 /*NAVEGADOR */
 ul {

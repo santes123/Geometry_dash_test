@@ -9,8 +9,9 @@
 	$db = "geometryDash";
 	$query = "insert into datos_usuario (nombre,apellidos,email,usuario,contrasenha) values ('$nombre','$apellidos','$email','$usuario','$contrasenha_md5')";
 	$query2 = "insert into usuario (usuario,contrasenha) values ('$usuario','$contrasenha_md5')";
+	$query3 = "insert into img_usuario_servidor (src) values('img_silueta.jpg');";
 	//$array_campos = array("usuario","contrasenha");
 	$acceso = new Conection('localhost',"root","",$db);
-	$result = $acceso->insert_usuario($query,$query2);
+	$result = $acceso->insert_usuario($query,$query2,$query3);
 	
 ?>

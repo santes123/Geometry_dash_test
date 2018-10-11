@@ -131,7 +131,7 @@ function numeroAleatorio(min, max) {
         //si el bloque a dibujar es un obstaculo,osea valor 1,dibujamos un triangulo
         
         if(this.valor == "1"){
-          alert("OBSTACULO");
+          //alert("OBSTACULO");
           contexto.beginPath();
           contexto.moveTo(x,y);
           //suelo

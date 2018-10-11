@@ -1,3 +1,21 @@
+<?php
+	session_start();
+	
+	if(isset($_SESSION['usuario'])){
+		$usuario = $_SESSION['usuario'];
+		include_once("../../admin/conection/conection.php");
+
+		$conexion = new Conection("localhost","root","","geometrydash");
+		//recuperamos la imagen de perfil de la nueva tabla
+		$query = "select ius.idUsuario,src from img_usuario_servidor as ius join usuario as u on(ius.idUsuario=u.idUsuario) where usuario = '".$usuario."';";
+		$result = $conexion->consulta($query);
+
+		$array_imgs = [];
+		while ($row = $result->fetch_object()){
+			array_push($array_imgs, $row );
+		}
+	}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,8 +52,9 @@
 				//if($_SESSION){
 				if(isset($_COOKIE["user_session"])){
 					//echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."</a>";
-					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_COOKIE["user_session"]."</b></u>!"."</a>";
+					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_COOKIE['user_session']."</b></u>!"."<img style='width: 30px; height: 30px; margin-left: 10px;' src='../Perfil/img_perfil/".$array_imgs[0]->src."'></a>";
 					echo "<ul id=\"sublista2\">";
+					echo "<li class=\"sub_li\"><a href=\"../Perfil/tu_perfil.php\" style='width: 100%; margin-left:0px;'>Tu Perfil</a></li>";
 					echo "<li class=\"sub_li\"><a href=\"../Perfil/editar_perfil/editar_perfil.php\" style='width: 100%; margin-left:0px;'>Editar Perfil</a></li>";
 					echo "<li class=\"sub_li\"><a href=\"../../acciones/Logout.php\" style='width: 100%; margin-left:0px;'>Logout</a></li>";
 					echo "</ul>";

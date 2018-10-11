@@ -30,9 +30,12 @@ user_id int not null,
 CONSTRAINT PK_Puntuaciones primary key(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 #tabla de ruta imagenes- perfil usuarios
-
-#tabla datos_extra de los usuarios
-
+drop table if exists img_usuario_servidor;
+create table if not exists img_usuario_servidor(
+idUsuario int not null,
+src varchar(150) not null,
+constraint PK_img_usuario_ruta primary key(idUsuario)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #añadimos una foreign key a kla tabla usuario para que tenga que coincidir con la tabla datos_usuario
 ALTER TABLE usuario ADD CONSTRAINT usuario_datosUsuario_FK FOREIGN KEY (idUsuario)
@@ -42,7 +45,13 @@ REFERENCES datos_usuario (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE puntuaciones ADD CONSTRAINT Puntuaciones_usuario_FK FOREIGN KEY (user_id)
 REFERENCES usuario (idUsuario) ON DELETE CASCADE ON UPDATE CASCADE;
 
+#alteramos la tabla img_usuario_servidor para apadirle la foreign key de la tabla usuario(idUsuario)
+alter table img_usuario_servidor add constraint usuario_imgUsuario_FK foreign key (idUsuario)
+references usuario (idUsuario) on delete cascade on update cascade;
 
-
-
+#alteramos al tabla datos_cliente para añadir algunos campos "no obligatorios" 
+#que podras rellenar en tu perfil.
+alter table datos_usuario add column telefono int(15) after contrasenha;
+alter table datos_usuario add column direccion varchar(100) after telefono;
+alter table datos_usuario add column biografia varchar(400) after direccion;
 
