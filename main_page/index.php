@@ -1,11 +1,4 @@
 <?php
-	/*
-	if(isset($_GET['deslogueado'])){
-		session_start();
-		session_destroy();
-		header("location: index.php");
-	}
-	*/
 	//mandamos una peticion GET al validar usuario, y si llega el valor,creamos la cookie de usuario para 1 hora
 	session_start();
 	if(isset($_SESSION['usuario'])){
@@ -95,11 +88,11 @@
 			</li>
 			<!-- un hueco reservado para cuando te logueas -->
 			<?php
-				
 				//if($_SESSION){
 				if(isset($_COOKIE["user_session"])){
-					//echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."</a>";
-					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_COOKIE['user_session']."</b></u>!"."<img style='width: 30px; height: 30px; margin-left: 10px;' src='paginas/Perfil/img_perfil/".$array_imgs[0]->src."'></a>";
+					//echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_COOKIE['user_session']."</b></u>!"."<img style='width: 30px; height: 30px; margin-left: 10px;' src='paginas/Perfil/img_perfil/".$array_imgs[0]->src."'></a>";
+					//usamos la $_SESSION porque se actualiza al momento, usando $_COOKIE hace falta refrescar el navegador para que se actualize
+					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."<img style='width: 30px; height: 30px; margin-left: 10px;' src='paginas/Perfil/img_perfil/".$array_imgs[0]->src."'></a>";
 					echo "<ul id=\"sublista2\">";
 					echo "<li class=\"sub_li\"><a href=\"paginas/Perfil/tu_perfil.php\" style='width: 100%; margin-left:0px;'>Tu Perfil</a></li>";
 					echo "<li class=\"sub_li\"><a href=\"paginas/Perfil/editar_perfil/editar_perfil.php\" style='width: 100%; margin-left:0px;'>Editar Perfil</a></li>";
@@ -122,6 +115,12 @@
 		</ul>
 	</div>
 	<section>
+		<?php
+			//div para cuando te registras y te mandan aquí y completas el 1º logro
+			if(isset($_GET['logro_completado'])){
+				echo "<div id='alerta_sin_conincidencia' style='margin-left: 40%; border-radius: 10px; border: 3px solid black; width: 20%; background-color: yellow;'><p style='margin-left: 15%;'>Logro <b><u>Registro completado!</u></b></p></div>";
+			}
+		?>
 		<div>
 			<article class="elemento">
 				

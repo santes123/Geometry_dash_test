@@ -1,7 +1,22 @@
 <?php
 	include_once '../../../../admin/conection/conection.php';
-	$db = "geometryDash";
 	session_start();
+	
+	if(isset($_SESSION['usuario'])){
+		$usuario = $_SESSION['usuario'];
+		include_once("../../../../admin/conection/conection.php");
+
+		$conexion = new Conection("localhost","root","","geometrydash");
+		//recuperamos la imagen de perfil de la nueva tabla
+		$query = "select ius.idUsuario,src from img_usuario_servidor as ius join usuario as u on(ius.idUsuario=u.idUsuario) where usuario = '".$usuario."';";
+		$result = $conexion->consulta($query);
+
+		$array_imgs = [];
+		while ($row = $result->fetch_object()){
+			array_push($array_imgs, $row );
+		}
+	}
+	$db = "geometryDash";
 	$usuario_actual = $_SESSION['usuario'];
 	$query = "select puntuacion,nivel,u.usuario as usuario from puntuaciones as p join usuario as u on(p.user_id=u.idUsuario) where u.usuario = '".$usuario_actual."' order by puntuacion desc limit 10;";
 	//$array_campos = array("usuario","contrasenha");
@@ -39,8 +54,31 @@
 				<ul id="sublista">
 					<li class="sub_li"><a href="tus_puntuaciones.php" style='width: 100%; margin-left:0px;'>Tus puntuaciones</a></li>
 					<li class="sub_li"><a href="../top_10_puntuaciones/puntuaciones.php" style='width: 100%; margin-left:0px;'>Mejores puntuaciones</a></li>
+					<li class="sub_li"><a href="../../paginas/modo_creativo/modo_creativo.php" style='width: 100%; margin-left:0px;'>Modo creativo</a></li>
+					<li class="sub_li"><a href="../../../Foro/foro.php" style='width: 100%; margin-left:0px;'>Foro</a></li>
+					<li class="sub_li"><a href="../../../Chat/chat_online.php" style='width: 100%; margin-left:0px;'>Chat online</a></li>
+
 				</ul>
 			</li>
+			<!-- un hueco reservado para cuando te logueas -->
+			<?php
+				//CONFIGURAR PARA ENVIAR PUNTUACIONES SIN ESTAR LOGUEADO(PREGUNTAR UN "NICK" AL INICIAR,O AL DESLOGUEARTE MANDAR AL USUARIO A LA PAGINA DE INICIO)
+				//session_start();
+				//if($_SESSION){
+				if(isset($_COOKIE["user_session"])){
+					//echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."</a>";
+					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>Hi <u><b>".$_SESSION['usuario']."</b></u>!"."<img style='width: 30px; height: 30px; margin-left: 10px;' src='../../../Perfil/img_perfil/".$array_imgs[0]->src."'></a>";
+					echo "<ul id=\"sublista2\">";
+					echo "<li class=\"sub_li\"><a href=\"../../../Perfil/tu_perfil.php\" style='width: 100%; margin-left:0px;'>Tu Perfil</a></li>";
+					echo "<li class=\"sub_li\"><a href=\"../../../Perfil/editar_perfil/editar_perfil.php\" style='width: 100%; margin-left:0px;'>Editar Perfil</a></li>";
+					echo "<li class=\"sub_li\"><a href=\"../../../Perfil/logros/logros.php\" style='width: 100%; margin-left:0px;'>Logros</a></li>";
+					echo "<li class=\"sub_li\"><a href=\"../../../../acciones/Logout.php\" style='width: 100%; margin-left:0px;'>Logout</a></li>";
+					echo "</ul>";
+					echo "</li>";
+				}else{
+					echo "<li class=\"li_ul\"><a href=\"\" style='width: 100%; margin-left:0px;'>No logueado</a></li>";
+				}
+			?>
 		</ul>
 	</nav>
 	<section style="border: 2px solid black; padding: 25px;">

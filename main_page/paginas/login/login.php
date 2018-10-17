@@ -76,20 +76,33 @@
 		</ul>
 	</nav>
 	<section>
+		<?php 
+		//div para cuando te registras y te mandan aquí y completas el 1º logro
+		if(isset($_GET['logro_completado'])){
+			echo "<div id='logro_completado' style='margin-left: 40%; border-radius: 10px; border: 3px solid black; width: 20%; background-color: yellow;'><p style='margin-left: 15%;'>Logro <b><u>Registro completado!</u></b></p></div>";
+		}
+		//div para cuando no existe esa cuenta
+		if(isset($_GET['no_existe'])){
+			echo "<div id='alerta_sin_conincidencia' style='margin-left: 40%; border-radius: 10px; border: 3px solid black; width: 20%; background-color: #f43838;'><p style='margin-left: 15%;'>El usuario no existe.</p></div>";
+		}
+		//div para cuando no coindicen usuario y contraseña pero existe el usuario
+		if(isset($_GET['no_coinciden'])){
+			echo "<div id='alerta_contrasenha_incorrecta' style='margin-left: 40%; border-radius: 10px; border: 3px solid black; width: 25%; background-color: #f43838;';><p style='margin-left: 10%;'>El usuario o la contraseña no coinciden.</p></div>";
+		}
+		?>
 		<form method="POST" action="acciones/verificar_login.php">
 			<fieldset>
-
-			<legend id="formulario">Login</legend>
-			<div>
-				<label>Usuario : </label><input type="text" name="usuario" size="50" maxlength="50" style="width: 200px;" autofocus="autofocus"><br><br>
-			</div>
-			<div>
-				<label>Contraseña : </label> <input type="password" name="contrasenha" size="50" style="width: 200px;" maxlength="255">
-			</div>
-			<br>
-			No tienes cuenta? <a href="../sign_up/sign_up.php">Registrate!</a><br>
-			Has olvidado tu contraseña? <a href="paginas/recuperar_contrasenha/recuperar_contrasenha.php">Recuperar contraseña</a><br><br>
-			<input type="submit" name="enviar" value="loguear" style="width: 120px; height: 30px; font-size: 14pt;" />
+				<legend id="formulario">Login</legend>
+				<div>
+					<label>Usuario : </label><input type="text" name="usuario" size="50" maxlength="50" style="width: 200px;" autofocus="autofocus"><br><br>
+				</div>
+				<div>
+					<label>Contraseña : </label> <input type="password" name="contrasenha" size="50" style="width: 200px;" maxlength="255">
+				</div>
+				<br>
+				No tienes cuenta? <a href="../sign_up/sign_up.php">Registrate!</a><br>
+				Has olvidado tu contraseña? <a href="paginas/recuperar_contrasenha/recuperar_contrasenha.php">Recuperar contraseña</a><br><br>
+				<input type="submit" name="enviar" value="loguear" style="width: 120px; height: 30px; font-size: 14pt;" />
 			</fieldset>
 		</form>
 	</section>

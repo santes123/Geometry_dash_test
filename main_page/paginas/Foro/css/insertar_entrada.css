@@ -2,18 +2,7 @@
 	box-sizing: border-box;
 }
 body{
-	background-color: lightblue;
-}
-canvas#canvas{
-	border:1px solid black; 
-	/*width: 1000px; */
-	height: 500px; 
-	margin-left: 12%;
-	background-color: #9da38c;
-}
-div#div_canvas{
-	padding: 15px; 
-	/*border: 1px solid black;*/
+    background-color: lightblue;
 }
 /*NAVEGADOR */
 ul {
@@ -24,6 +13,7 @@ ul {
     background-color: #333;
     height: 55px;
 }
+
 li {
     float: left;
     width:calc(100%/5);
@@ -41,7 +31,7 @@ li a {
     margin-left: 35%;
 }
 
-.li_ul:hover {
+li:hover {
     background-color: #434343;
 }
 
@@ -54,7 +44,6 @@ li a {
 }
 #sublista{
     width: 220px;
-    height: 200px;
 }
 .nav li ul {
     display: none;
@@ -114,9 +103,4 @@ li a {
     right:-1000px;
     top:40px;
     display: flex;
-}
-/* estilos de los botones dentro de los dialog del canvas */
-
-.botonesCanvas:hover{
-    background-color: #ff3838;
 }

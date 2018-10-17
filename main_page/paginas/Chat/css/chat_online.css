@@ -2,20 +2,58 @@
 	box-sizing: border-box;
 }
 body{
-	background-color: lightblue;
+    background-color: lightblue;
 }
-canvas#canvas{
-	border:1px solid black; 
-	/*width: 1000px; */
-	height: 500px; 
-	margin-left: 12%;
-	background-color: #9da38c;
+/*TOOLTIP MENSAJE*/
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
 }
-div#div_canvas{
-	padding: 15px; 
-	/*border: 1px solid black;*/
+
+/* Tooltip text */
+.tooltip #tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip #tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+/* CAMBIAMOS EL CURSOR AL PASAR POR ENCIMA DE UN USUARIO EN LA LISTA DE USUARIOS ONLINE */
+.usuario_online:hover{
+    cursor: pointer;
+    text-decoration: underline;
 }
 /*NAVEGADOR */
+#nav{
+    margin-bottom: 2.5%;
+}
 ul {
     list-style-type: none;
     margin: 0;
@@ -24,6 +62,7 @@ ul {
     background-color: #333;
     height: 55px;
 }
+
 li {
     float: left;
     width:calc(100%/5);
@@ -41,7 +80,7 @@ li a {
     margin-left: 35%;
 }
 
-.li_ul:hover {
+li:hover {
     background-color: #434343;
 }
 
@@ -54,7 +93,6 @@ li a {
 }
 #sublista{
     width: 220px;
-    height: 200px;
 }
 .nav li ul {
     display: none;
@@ -114,9 +152,4 @@ li a {
     right:-1000px;
     top:40px;
     display: flex;
-}
-/* estilos de los botones dentro de los dialog del canvas */
-
-.botonesCanvas:hover{
-    background-color: #ff3838;
 }

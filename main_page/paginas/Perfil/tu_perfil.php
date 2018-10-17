@@ -19,8 +19,7 @@
 	$array_imgs = [];
 	while ($row2 = $result2->fetch_object()){
 		array_push($array_imgs, $row2 );
-	}
-	//CARGAR ESAS FOTOS AQUÍ Y AL LADO DE "HI x" en el menu de todas las paginas
+	}	
 ?>
 <!DOCTYPE html>
 <html>
@@ -70,8 +69,8 @@
 					<?php
 						//if($_SESSION){
 						if(isset($_COOKIE["user_session"])){
-							echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;'></a></li>";
-							echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;'></a></li>";
+							echo "<li class=\"sub_li\"><a href=\"../Foro/foro.php\" style='width: 100%; margin-left:0px;'>Foro</a></li>";
+							echo "<li class=\"sub_li\"><a href=\"../Chat/chat_online.php\" style='width: 100%; margin-left:0px;'>Chat online</a></li>";
 						}else{
 							echo "<li class=\"sub_li\"><a href=\"../login/login.php\" style='width: 100%; margin-left:0px;'>Logueate</a></li>";
 							echo "<li class=\"sub_li\"><a href=\"../sign_up/sign_up.php\" style='width: 100%; margin-left:0px;'>Registrate</a></li>";
@@ -95,6 +94,7 @@
 					echo "<li class=\"sub_li\"><a href=\"../Perfil/tu_perfil.php\" style='width: 100%; margin-left:0px;'>Tu Perfil</a></li>";
 					echo "<li class=\"sub_li\"><a href=\"../Perfil/editar_perfil/editar_perfil.php\" style='width: 100%; margin-left:0px;'>Editar Perfil</a></li>";
 					//echo "<li class=\"sub_li\"><a href=\"\" style='width: 100%; margin-left:0px;' onclick=\"".session_destroy()."location.reload()\">Logout</li>";
+					echo "<li class=\"sub_li\"><a href=\"../Perfil/Logros/logros.php\" style='width: 100%; margin-left:0px;'>Logros</a></li>";
 					echo "<li class=\"sub_li\"><a href=\"../../acciones/Logout.php\" style='width: 100%; margin-left:0px;' onclick=\"\">Logout</a></li>";
 					echo "</ul>";
 					echo "</li>";
@@ -109,15 +109,54 @@
 			<form method="POST" action="#">
 				<fieldset>
 					<legend id="formulario">Tus Datos</legend>
+					<div style="display: flex;">
 					<?php 
 						if(isset($_GET['update'])){
 							?>
-							<div style="border: 2px solid black; border-radius: 5px; background-color: green; width: 220px; height: 50px; padding: 5px; margin-left: 25%; padding-top: 10px;">
+							<div style="border: 2px solid black; border-radius: 5px; background-color: green; width: 220px; height: 50px; padding: 5px; margin-left: 15%; padding-top: 10px;">
 								Tus datos han sido actualizados
 							</div>
 							<?php
 						} 
+						//si al cargar la pagina tiene un get diciendo que se ha cambiado la foto, verificamos si es diferente de silueta.jpg y si lo es añadimos el logro
+						if(isset($_GET['update'])){
+							//recuperamos la imagen de perfil y vemos si es diferente de "img_silueta.jpg" devolvemos true, sino false
+							$query3 = "select src from img_usuario_servidor as ius join usuario as u on(ius.idUsuario=u.idUsuario) where usuario = '".$usuario."';";
+							$result3 = $conexion->consulta($query2);
+
+							$array_img_usuario = [];
+							while ($row3 = $result3->fetch_object()){
+								array_push($array_img_usuario, $row3 );
+							}
+							//recuperamos el logro de ese usuario, si ya lo tiene no hacemos nada, si no lo tiene y la img es diferente a "img_silueta.jpg" añadimos el logro
+							$query4 = "select nombre_logro from logros_generales as lg join usuario as u on(lg.idUsuario=u.idUsuario) where usuario = '".$usuario."' and 
+										nombre_logro = 'cambia tu foto de perfil!';";
+							$result4 = $conexion->consulta($query4);
+
+							$array_logros = [];
+							while ($row4 = $result4->fetch_object()){
+								array_push($array_logros, $row4 );
+							}
+							if($array_img_usuario[0]->src != "img_silueta.jpg" && $result4->num_rows <= 0){
+								echo "<div style='border: 2px solid black; border-radius: 5px; background-color: yellow; width: 220px; height: 50px; padding: 5px; margin-left: 25%; padding-top: 10px;'>";
+								echo "Logro <b><u>Cambia tu foto de perfil!</u></b>";
+								echo "</div>";
+								//recuperamos el id del usuario
+								$query6 = "select idUsuario from usuario where usuario = '".$usuario."';";
+								$result6 = $conexion->consulta($query6);
+
+								$array_id_usuario = [];
+								while ($row6 = $result6->fetch_object()){
+									array_push($array_id_usuario, $row6 );
+								}
+								$fecha = date("Y/m/d");
+								$query5 = "insert into logros_generales (nombre_logro, dia_conseguido, idUsuario) values ('cambia tu foto de perfil!','".$fecha."','".$array_id_usuario[0]->idUsuario."');";
+								$result5 = $conexion->consulta($query5);
+							}
+						}
+
 					?>
+					</div>
 					<div>
 						<input type="hidden" name="id" maxlength="11" value="<?php echo utf8_encode($array_usuarios[0]->id); ?>" style="width: 200px;" readonly="readonly"><br>
 					</div>

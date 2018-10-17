@@ -169,7 +169,7 @@ incluiremos todos los datos de la tabla datos_usuario y crearemos otras 2 tablas
 			</div>
 			<br>
 			<div>
-				<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
+				<form action="<?php echo $_SERVER['PHP_SELF']."?foto_cambiada=true"; ?>" method="POST" enctype="multipart/form-data">
 					<fieldset>
 						<legend id="formulario"><b><u>Sube tu imagen y usala!</u></b></legend>
 						<span style="font-size: 8pt;"><u>Si ya tienes tu imagen guardada anteriormente, <b>NO toques este apartado!</b>.</u></span>

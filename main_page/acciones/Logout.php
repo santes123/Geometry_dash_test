@@ -4,7 +4,7 @@
 	unset($_SESSION['usuario']);
 	//session_destroy();
 
-	//setcookie("user_session", "x", time() - 10);
+	//setcookie("user_session", $_SESSION['usuario'], time() - 200);
 	unset($_COOKIE['user_session']);
 	//var_dump($_COOKIE);
 

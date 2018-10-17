@@ -27,7 +27,7 @@ var nivel_elegido;
 var sobre_bloques = false;
 var salto_on;
 var contador_pasadas_limpiar = 0;
-
+var saltos_por_sesion = 0;
 var cancion1src = "files/geometry_dash_sounds/nivel 1.mp3";
 var cancion2src = "files/geometry_dash_sounds/nivel 3.mp3";
 var cancion3src = "files/geometry_dash_sounds/nivel 6.mp3";
@@ -197,6 +197,7 @@ function Cuadrado (x,y,w,h,color) {
 	     	}, 1000/FPS);
 	     	salto_on = false;
      	}
+     	saltos_por_sesion = saltos_por_sesion + 1;
     }
     this.caida = function(){
     	//alert("cuando salgo fuera de los bloques y tengo que caer");
@@ -353,8 +354,15 @@ function startGame (nivel) {
 	canvas.height = "500";
 	canvas.onclick = "javascript:init()";
 	canvas.innerHTML = "Su navegador no soporta Canvas.";
+
+	//recuperamos el cuadro de logro, si existe, y lo pones en display none
+	if(document.getElementById("logro_completado")){
+		document.getElementById("logro_completado").style.display = 'none';
+	}
+
 	div_canvas.appendChild(canvas);
 	init();
+
 }
 //funcion que se ejecuta al iniciar
 function gameStart () {
@@ -379,22 +387,11 @@ function gamePause (elemento) {
 }
 //funcion que se ejecuta al acabar
 function gameEnd () {
-	/*
-	window.document.body.innerHTML = "<style type=\"text/css\">"+
-										".botonesCanvas:hover {"+
-								    		"background-color: #ff3838;"+
-										"}"+
-									"</style>";
-	var style = document.createElement("style");
-	style.type = "text/css";
-	style.innerHTML = ".botonesCanvas:hover { background-color: #ff3838; }";
-	window.document.body.appendChild(style);
-	*/
 	pauseAudio(audio);
     div_canvas.innerHTML = "<dialog id='dialog' open='open' style='width: 250px; margin-top: 10%; border: 1px solid black; border-radius: 5px;'>"+
     						"<p style='margin-left: 20%; margin-botom: 10%; font-family: \"Arial Black\";'><b><u>Fin del juego!</u></b></p>"+ 
     						"<p style='margin-left: 15%; margin-botom: 10%; font-family: \"Arial Black\";'><span style='color:red;'>Puntuacion -> </span><b><u>"+document.getElementById("puntuacion").value+"</u></b></p>"+
-    						"<a href='acciones/enviar_puntuacion.php?puntuacion="+document.getElementById("puntuacion").value+"&nivel="+nivel_elegido+"'><button class='botonesCanvas' style='margin-left: 15%; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";'>Enviar puntuacion</button></a><br>"+
+    						"<a href='acciones/enviar_puntuacion.php?puntuacion="+document.getElementById("puntuacion").value+"&nivel="+nivel_elegido+"&saltos="+saltos_por_sesion+"'><button class='botonesCanvas' style='margin-left: 15%; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";'>Enviar puntuacion</button></a><br>"+
 							"<a href='puntuaciones/top_10_puntuaciones/puntuaciones.php'><button class='botonesCanvas' style='margin-left: 15%; margin-top: 5px; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";'>Top 10 puntuaciones</button></a><br>"+
 							"<a href='puntuaciones/tus_puntuaciones/tus_puntuaciones.php'><button class='botonesCanvas' style='margin-left: 15%; margin-top: 5px; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";'>Tus puntuaciones</button></a><br>"+
 							"<button class='botonesCanvas' style='margin-left: 15%; margin-top: 5px; width: 150px; text-align: center; border: 2px solid black; border-radius: 5px; background-color: #b6f442; font-family: \"impact\";' onclick='location.reload();'>Volver a jugar</button>"+
